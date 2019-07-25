@@ -55,5 +55,4 @@ def find(text, hyp):
                 l.sorted(key=y)
                 return l[0]
 #print(se_text("hello world").shape)
-#do we normalize different what about idf
-#Sum(idf(word)*that word's embedding)
+#Sum(idf(word)*that word's embedding) all of the words not for a chalor but for a np.array(50,)
