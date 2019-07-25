@@ -109,5 +109,5 @@ venv.bak/
 *.idea/
 
 #Very big files
-*.pkl
-*.json
+resnet18_features.pkl
+captions_train2014.json
