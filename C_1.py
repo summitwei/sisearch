@@ -16,15 +16,15 @@ def se_text(text):
     for i in l:
         ret+= glove[i]   #Combines all vectors
     TotalWords += len(l)
-    f=Counter(l)
+    f=dict(Counter(l))
 
-    return ret/len(l) #Normalizes
+    return ret/np.linalg.norm(ret) #Normalizes
     #Do we have repeates
 data = database[url]
 def se_image(path, url):#path is the pickle file
     ''' This takes in the url and returns the np.array'''
     # downloading the data
-
+    i(f(text))
 
     # converting the downloaded bytes into a numpy-array
 
