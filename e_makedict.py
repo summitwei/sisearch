@@ -19,8 +19,9 @@ def make_dict(path, pkl, enc):
     that maps COCO images to the
     512-dimensional images.
     enc: Valid pickle file name
-    A pickle file of a class containing
-    an autoencoder.
+    A pickle file of a tuple of a matrix
+    and a value, the parameters of the
+    trained neural network.
 
     Returns:
     --------
@@ -40,7 +41,7 @@ def make_dict(path, pkl, enc):
     with open(pkl, "rb") as pickle_file:
         feat = pickle.load(pickle_file)
     with open(enc, "rb") as pick_file2:
-        model = pickle.load(pick_file2)
+        k, b = pickle.load(pick_file2)
     
 
     print(len(feat.keys()))
@@ -49,7 +50,7 @@ def make_dict(path, pkl, enc):
         curl = img['coco_url']
         if(img['id'] not in feat):
             continue
-        vec = model(feat[img['id']])
+        vec = feat[img['id']] @ k + b
         res[curl] = vec
     
     pickle_out = open("database.pickle", "wb")
