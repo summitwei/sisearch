@@ -111,3 +111,4 @@ venv.bak/
 #Very big files
 resnet18_features.pkl
 captions_train2014.json
+glove.6B.50d.txt.w2v
