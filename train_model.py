@@ -116,22 +116,22 @@ while  index<5000000:
             pickle.dump(model, open("model.pkl", "wb"))
             sys.exit(0)
             # Pickle dump
-    goodFeature=[]
-    badFeature=[]
-    captionEmbed=[]
+    goodFeature=np.array([])
+    badFeature=np.array([])
+    captionEmbed=np.array([])
     for nfl in range(500):
         id=0
         while id not in useful:
             id=random.sample(bigDict["images"],1)[0]["id"]
-        captionEmbed.append(np.array(random.sample(idToCaption[id],1)[0]))
+        captionEmbed=np.append(captionEmbed,np.array(random.sample(idToCaption[id],1)[0]))
     # caption=caption.translate(None, string.punctuation).lower()
-        goodFeature.append(model(smallDict[id]))
+        goodFeature=np.append(goodFeature,model(smallDict[id]))
 
     # print(caption)
         badID=0
         while badID not in useful:
             badID=random.sample(bigDict["images"],1)[0]["id"]
-        badFeature.append(model(smallDict[badID]))
+        badFeature=np.append(badFeature,model(smallDict[badID]))
 
 
     loss=mg.nnet.margin_ranking_loss(goodFeature@captionEmbed,badFeature@captionEmbed,1,0.1)
