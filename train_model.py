@@ -110,45 +110,85 @@ useful2=set(smallDict.keys())
 lossSoFa=[]
 index=0
 while  index<5000000:
-    if index%100000==0:
-        ans=input("Do you want to continue: 1 or 0")
-        if int(ans)==0:
-            pickle.dump(model, open("model.pkl", "wb"))
-            sys.exit(0)
+    if index%200==0:
+        # ans=input("Do you want to continue: 1 or 0")
+        if True:
+            # pickle.dump(model, open("model.pkl", "wb"))
+            # print(model.parameters)
+            bruh=np.array([model.parameters[0].data, model.parameters[1].data])
+            # print(type(bruh))
+
+            np.save("model",bruh )
+            # sys.exit(0)
+
             # Pickle dump
-    goodFeature=np.array([])
-    badFeature=np.array([])
-    captionEmbed=np.array([])
+    goodFeature=[]
+    badFeature=[]
+    captionEmbed=[]
     for nfl in range(500):
         id=0
         while id not in useful:
             id=random.sample(bigDict["images"],1)[0]["id"]
-        captionEmbed=np.append(captionEmbed,np.array(random.sample(idToCaption[id],1)[0]))
+        captionEmbed.append(np.array(random.sample(idToCaption[id],1)[0]))
+        # print("Caption Embed" + str(captionEmbed))
     # caption=caption.translate(None, string.punctuation).lower()
-        goodFeature=np.append(goodFeature,model(smallDict[id]))
+        goodFeature.append((smallDict[id]))
 
     # print(caption)
         badID=0
         while badID not in useful:
             badID=random.sample(bigDict["images"],1)[0]["id"]
-        badFeature=np.append(badFeature,model(smallDict[badID]))
+        badFeature.append((smallDict[badID]))
+        # print(nfl)
+    goodFeature=model(goodFeature)
+    badFeature=model(badFeature)
 
+    captionEmbed=np.array(captionEmbed)
 
-    loss=mg.nnet.margin_ranking_loss(goodFeature@captionEmbed,badFeature@captionEmbed,1,0.1)
+    # goodFeature=np.array(goodFeature)
+    # badFeature=np.array(badFeature)
+    # print("pass 1")
+    # goodFeature2=captionEmbed*goodFeature.reshape(500,50)
+    # badFeature2=captionEmbed*badFeature.reshape(500,50)
+    # goodFeature2=np.sum(goodFeature2,axis=1)
+    # badFeature2=np.sum(badFeature2,axis=1)
+    # print(goodFeature2[0])
+    # print(badFeature2[0])
+    # # for mlb in range(500):
+    # #     goodFeature2.append(captionEmbed[mlb]@goodFeature[mlb].reshape(50))
+    # #     badFeature2.append(captionEmbed[mlb]@badFeature[mlb].reshape(50))
+    # # goodFeature=goodFeature[goodFeature@captionEmbed]
+    # # badFeature=badFeature[badFeature@captionEmbed]
+    # print("pass2")
+    # # goodFeature2=np.array(goodFeature2)
+    # # badFeature2=np.array(badFeature2)
+    # print(goodFeature2.shape)
+    # print(badFeature2.shape)
+    # print(goodFeature.shape)
+    # print(badFeature.shape)
+    # print(captionEmbed.shape)
+    goodFeature2=captionEmbed*goodFeature.reshape(500,50)
+    badFeature2=captionEmbed*badFeature.reshape(500,50)
+    goodFeature2=mg.sum(goodFeature2,axis=1)
+    badFeature2=mg.sum(badFeature2,axis=1)
+
+    loss=mg.nnet.margin_ranking_loss(goodFeature2,badFeature2,1,0.1)
     lossSoFa.append(loss.item())
     loss.backward()
     optim.step()
     loss.null_gradients()
     # plotter.set_train_batch({"loss": loss.item()}, batch_size=500)
-    if index%2000==0:
+    if index%8==0:
     #     plotter.set_train_epoch()
-        print("a:%s, loss:%s"%(index,np.mean(lossSoFa)))
+        print("a:%s, loss:%s"%(index*500,np.mean(lossSoFa)))
         # lossSoFa=[]
     # loss=mg.nnet.margin_ranking_loss()
     index+=1
     if np.mean(lossSoFa)<.0001 and np.mean(lossSoFa)>0:
-        pickle.dump(model, open("model.pkl", "wb"))
-        sys.exit(2)
+        # pickle.dump(model, open("model.pkl", "wb"))
+        # sys.exit(2)
+        print(model.parameters)
+        np.save("model.npy",np.array([model.parameters[0],model.parameters[1]]))
 pickle.dump(model,open("model.pkl","wb"))
 
 

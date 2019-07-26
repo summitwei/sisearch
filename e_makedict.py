@@ -56,3 +56,5 @@ def make_dict(path, pkl, enc):
     pickle_out.close()
 
     return res
+
+make_dict(r'./captions_train2014.json',r'./resnet18_features.pkl',r"./model.npy")
