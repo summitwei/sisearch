@@ -108,6 +108,7 @@ optim=Adam(model.parameters)
 useful=set(idToCaption.keys())
 useful2=set(smallDict.keys())
 lossSoFa=[]
+accuracy=0
 index=0
 while  index<5000000:
     if index%200==0:
@@ -173,6 +174,9 @@ while  index<5000000:
     badFeature2=mg.sum(badFeature2,axis=1)
 
     loss=mg.nnet.margin_ranking_loss(goodFeature2,badFeature2,1,0.1)
+    for ggg in range(0,500):
+        if goodFeature2[ggg]-badFeature2[ggg]>0.5:
+            accuracy+=1
     lossSoFa.append(loss.item())
     loss.backward()
     optim.step()
@@ -180,7 +184,7 @@ while  index<5000000:
     # plotter.set_train_batch({"loss": loss.item()}, batch_size=500)
     if index%8==0:
     #     plotter.set_train_epoch()
-        print("a:%s, loss:%s"%(index*500,np.mean(lossSoFa)))
+        print("a:%s, loss:%s,accuracy: %s"%(index*500,np.mean(lossSoFa),accuracy/(index*500)))
         # lossSoFa=[]
     # loss=mg.nnet.margin_ranking_loss()
     index+=1
