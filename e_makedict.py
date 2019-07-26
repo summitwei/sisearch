@@ -38,10 +38,8 @@ def make_dict(path, pkl, enc):
     with open(path) as json_file:
         data = json.load(json_file)
         print(data['images'][0])
-    with open(pkl, "rb") as pickle_file:
-        feat = pickle.load(pickle_file)
-    with open(enc, "rb") as pick_file2:
-        k, b = pickle.load(pick_file2)
+    feat = np.load(pkl, allow_pickle=True)
+    k, b = np.load(enc, allow_pickle=True)
     
 
     print(len(feat.keys()))
