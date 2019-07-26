@@ -13,18 +13,23 @@ def se_text(text):
     '''This embeds a string by turning it into a list then summing the glove values. The out put is the normalized output'''
     l = text.split()     # makes a list for all the words
     ret= np.zeros((1,50))  #Size of vectors
+    TotalWords = len(l)
+    f = dict(Counter(l))
+    o = se_text(text)
+
     for i in l:
-        ret+= glove[i]   #Combines all vectors
-    TotalWords += len(l)
-    f=dict(Counter(l))
+        idf = i(f(i))
+        ret+= idf*glove[i]   #Combines all vectors
+
+
 
     return ret/np.linalg.norm(ret) #Normalizes
     #Do we have repeates
-data = database[url]
+#data = database[url]
 def se_image(path, url):#path is the pickle file
     ''' This takes in the url and returns the np.array'''
     # downloading the data
-    i(f(text))
+
 
     # converting the downloaded bytes into a numpy-array
 
@@ -36,14 +41,15 @@ def se_image(path, url):#path is the pickle file
 
     # displaying the image
     fig, ax = plt.subplots()
-    ax.imshow(img)
+    ax.imshow(data)
 
 def Sim(text, pice ):
     '''give the semantic text, and semantic picture'''
     return np.dot(text,pice)
-def find(text, hyp):
+def find(text, hyp=.75):
     pic = data
     l=[]
+
     pickle = database
     v = Sim(text,pic)
     for pics in pickle:
@@ -54,5 +60,6 @@ def find(text, hyp):
                 y = lambda item : item[1]
                 l.sorted(key=y)
                 return l[0]
+
 #print(se_text("hello world").shape)
 #Sum(idf(word)*that word's embedding) all of the words not for a chalor but for a np.array(50,)
